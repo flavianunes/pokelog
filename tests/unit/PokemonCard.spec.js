@@ -7,7 +7,7 @@ jest.mock("axios", () => ({
       data: {
         is_default: true,
         sprites: {
-          front_details:
+          front_default:
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
         },
       },
@@ -15,11 +15,16 @@ jest.mock("axios", () => ({
 }));
 
 describe("PokemonCard.vue", () => {
+  const wrapper = shallowMount(PokemonCard, { propsData: { name: "pikachu" } });
   it("it should render image and name", () => {
-    const wrapper = shallowMount(PokemonCard, { name: "pikachu" });
-    console.log({ wrapper: wrapper });
     wrapper.vm.$nextTick(() => {
-      expect(wrapper.findAll("img").length).toBe(1);
+      expect(wrapper.vm.name).toMatch("pikachu");
+      expect(wrapper.findAll("img").length).toEqual(1);
+      expect(wrapper.findAll("h2").length).toEqual(1);
+      expect(wrapper.find("img").attributes("src")).toBe(
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+      );
+      expect(wrapper.find("h2").text()).toBe("pikachu");
     });
   });
 });
